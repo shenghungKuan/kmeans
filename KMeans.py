@@ -3,8 +3,9 @@ import random
 
 class KMeans(cluster):
 
-    def __init__(self, k=5, max_iteration=100):
+    def __init__(self, k=5, max_iteration=100, balanced=False):
         super().__init__(k, max_iteration)
+        self.balanced = balanced
 
     def fit(self, x):
         super().fit(x)
@@ -48,28 +49,34 @@ class KMeans(cluster):
         instance_num = len(x)
         feature_num = len(x[0])
         centroids_num = len(centroids)
-        cluster_hypotheses = [0 for i in range(instance_num)]
+        cluster_hypotheses = [-1 for i in range(instance_num)]
+        cluster_size = [0 for i in range(centroids_num)]
+        balanced_size = instance_num // self.k + 1
 
         # Cluster the instances
         for i in range(instance_num):
             closest_distance = float('infinity')
             for j in range(centroids_num):
+                if self.balanced and cluster_size[j] >= balanced_size:
+                    continue
                 distance = float(0)
                 for k in range(feature_num):
                     distance += (x[i][k] - centroids[j][k]) ** 2
                 if distance < closest_distance:
+                    if cluster_hypotheses[i] != -1:
+                        cluster_size[cluster_hypotheses[i]] -= 1
                     cluster_hypotheses[i] = j
+                    cluster_size[j] += 1
                     closest_distance = distance
 
         # Recalculate the centroids
-        cluster_size = [1 for i in range(centroids_num)]
         feature_sum = [[0 for i in range(feature_num)] for i in range(centroids_num)]
         for i in range(instance_num):
             cluster_num = cluster_hypotheses[i]
             for j in range(feature_num):
                 feature_sum[cluster_num][j] += x[i][j]
-            cluster_size[cluster_num] += 1
         for i in range(centroids_num):
+            cluster_size[i] = 1 if cluster_size[i] == 0 else cluster_size[i]
             centroids[i] = [feature_sum[i][j] / cluster_size[i] for j in range(feature_num)]
 
         return cluster_hypotheses
