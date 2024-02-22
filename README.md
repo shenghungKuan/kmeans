@@ -1,9 +1,18 @@
 # KMeans
 
-Assignment 2 - CS 663 - Machine Learning
+## cluster.py
+Is a parent class for KMeans.py, including init and fit functions  
 
-In addition to this README.md file, this repository contains two (2) files:
-* `Assignment 2 - Clustering.ipynb`: which is a notebook for you to start your implementation of this assignment
-* `cluster.py`: which can be the superclass for your implementation of KMeans
+## KMeans.py
+Is the class for KMeans. Functions includes:  
+__init__: the init function for the class  
+fit: the main function of the class  
+normalize: normalize the given data  
+cluster: the main clustering implementation  
+converge: check if the clustering converges or not  
 
-You may make any changes you like to the notebook. Find assignment details as well as links to the required data on Canvas.
+## Assignment 2 - Clustering.ipynb
+Contains:  
+The comparison of my own version of KMeans between the one of sklearn, including the figures and the v-measure score respectively  
+Data analysis of the Chicago taxi dataset, clustering, and performance evaluation  
+Data analysis of routes of Mopsi users in Finland, clustering, and performance evalution  
